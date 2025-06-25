@@ -1,111 +1,91 @@
-# 🚀 Nexus CLI — One-Command Installation Guide
-
-Easily deploy your Nexus node using a single command. Choose between:
-
-- 🟢 **Simple (Single Node)** — Recommended for most users  
-- 🔵 **Advanced (Multi-Node)** — Run multiple nodes on one machine
+# 🚀 Nexus CLI: One-Command Installation Guide
+Set up your Nexus node in **two ways**: **Simple (Single Node)** or **Multiple Nodes**. Choose the method that fits your needs!
 
 ---
 
-## 🚦 Simple Node Setup *(1 Node per VPS/PC)*
+## 🚦 Simple Node Setup (Recommended for Most Users)
 
-Install & run your Nexus node with one command:
+This method runs **one node per VPS or PC**.
 
-```bash
-source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/installation.sh)
-```
-
-- 🔐 You’ll be prompted for your Node ID during setup.
-
-- ✅ After installation, your node will start automatically as a background service.
-
-- 🔍 Find Your Node ID
-
-- 🌐 Go to: https://app.nexus.xyz/nodes
-
-- 🔑 Log in to your account
-
-- 📋 Copy your Node ID from the dashboard
-
-- 💻 Paste it when prompted during installation
-
-🔄 Multi-Node Setup (Run multiple nodes on one VPS/PC)
-⚠️ Recommended: 8GB RAM per VPS for multi-node setup
-
-
-
-
-# Run the multi-node installation script:
-
+### **Install & Run Nexus Node**
 
 ```bash
-source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/multi.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/HustleAirdrops/Nexus-Node-One-Command/main/installation.sh)
 ```
 
-You’ll be asked:
+- The script will prompt for your **Node ID** (see below).
+- Your node will start automatically after setup.
 
-How many nodes you want to run
+#### 🔍 **How to Find Your Node ID**
 
-A Node ID for each one (entered one-by-one)
+1. 🌐 Visit [https://app.nexus.xyz/nodes](https://app.nexus.xyz/nodes)
+2. 🔑 Login and copy your **Node ID** from the dashboard.
+3. 📋 Paste it when prompted during installation.
 
-🛠️ Useful Commands
-✅ Start a node manually
-bash
-Copiar
-Editar
-nexus-network start --node-id <Your_Node_ID>
-📄 View logs
-Single Node Setup:
+---
 
-bash
-Copiar
-Editar
+## 🔄 Multiple Node Setup (Advanced: Run Multiple Nodes on One VPS/PC)
+
+> **Note:** 1 vps = Multiple node IDs of one account run. ( Around 8gb Ram = 1 Nexus multi )
+
+### **Run the Multi-Node Script**
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/HustleAirdrops/Nexus-Node-One-Command/main/multi.sh)
+```
+
+- The script will ask **how many nodes** you want to run.
+- Enter the number, then provide a **Node ID** for each node (one by one).
+
+---
+
+## 🛠️ Useful Commands
+
+### **Start Node Manually (Single Node)**
+
+```bash
+nexus-network start --node-id <Node_ID>
+```
+Replace `<Node_ID>` with your actual Node ID.
+
+### 📄 **Check Node Logs**
+
+#### **For Single Node Setup**
+
+```bash
 journalctl -fu nexus -o cat
-Multi-Node Setup:
+```
 
-bash
-Copiar
-Editar
+#### **For Multiple Node Setup**
+
+```bash
 journalctl -u nexus-nodeX -f
-📌 Replace X with your node number (1, 2, etc.)
+```
+> 📌 Replace `X` with the node number (e.g., 1, 2, ...).
 
-🧹 Cleanup Commands
-❌ Remove Single Node Setup
-bash
-Copiar
-Editar
+### 🗑️ **Delete All Nodes (Cleanup Commands)**
+
+#### **For Single Node Setup**
+
+```bash
 sudo systemctl stop nexus && \
 sudo systemctl disable nexus && \
 sudo rm /etc/systemd/system/nexus.service && \
 sudo systemctl daemon-reload && \
-sudo rm -rf ~/nexus-cli ~/.cargo /usr/local/bin/nexus-network
-❌ Remove Multi-Node Setup
-bash
-Copiar
-Editar
+sudo rm -rf ~/nexus-cli && \
+sudo rm -rf ~/.cargo && \
+sudo rm -rf /usr/local/bin/nexus-network
+```
+
+#### **For Multiple Node Setup**
+
+```bash
 sudo systemctl stop $(systemctl list-units --type=service --no-pager | grep nexus-node | awk '{print $1}') && \
 sudo systemctl disable $(systemctl list-units --type=service --no-pager | grep nexus-node | awk '{print $1}') && \
 sudo rm -rf ~/nexus-multi && \
 sudo rm -f /etc/systemd/system/nexus-node* && \
 sudo systemctl daemon-reload && \
 sudo systemctl reset-failed
-🙌 Community & Support
-Need help or want to contribute?
-
-💬 Join the Nexus Discord
-
-🛠️ Official Nexus Docs
-
-🧑‍💻 Maintained by @renanls6
-
-yaml
-Copiar
-Editar
-
-</details>
+```
 
 ---
-
-Se o problema continuar mesmo após limpar e salvar corretamente, envie o conteúdo atual do seu `README.md` e posso corrigir exatamente o que está quebrando o preview.
-
-Deseja que eu revise o arquivo real para garantir 100% de compatibilidade? Você pode colar aqui o con
