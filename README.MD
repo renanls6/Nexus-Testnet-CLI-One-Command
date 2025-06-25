@@ -15,26 +15,27 @@ Install & run your Nexus node with one command:
 source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/installation.sh)
 ```
 
-🔐 You’ll be prompted for your Node ID during setup.
+- 🔐 You’ll be prompted for your Node ID during setup.
 
-✅ After installation, your node will start automatically as a background service.
+- ✅ After installation, your node will start automatically as a background service.
 
-🔍 Find Your Node ID
+- 🔍 Find Your Node ID
 
-🌐 Go to: https://app.nexus.xyz/nodes
+- 🌐 Go to: https://app.nexus.xyz/nodes
 
-🔑 Log in to your account
+- 🔑 Log in to your account
 
-📋 Copy your Node ID from the dashboard
+- 📋 Copy your Node ID from the dashboard
 
-💻 Paste it when prompted during installation
+- 💻 Paste it when prompted during installation
 
 🔄 Multi-Node Setup (Run multiple nodes on one VPS/PC)
 ⚠️ Recommended: 8GB RAM per VPS for multi-node setup
 
 
 
-Run the multi-node installation script:
+
+# Run the multi-node installation script:
 
 
 ```bash
