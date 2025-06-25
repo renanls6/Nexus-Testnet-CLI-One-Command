@@ -1,96 +1,103 @@
 #!/bin/bash
 
-# Load colors
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-CYAN=$(tput setaf 6)
-YELLOW=$(tput setaf 3)
-BOLD=$(tput bold)
-RESET=$(tput sgr0)
+# Define colors
+CYAN='\033[0;36m'
+BLUE='\033[1;34m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 
-# Show welcome
-whiptail --title "🚀 Nexus CLI Node Setup" --msgbox "Welcome! This script will help you install and run your Nexus CLI node.\n\nMake sure you’re logged into https://app.nexus.xyz/nodes before continuing." 12 60
+# Header
+clear
+echo -e "${CYAN}"
+echo -e " ${BLUE} ███╗   ██╗███████╗██╗  ██╗██╗   ██╗███████╗███████╗${NC}"
+echo -e " ${BLUE} ████╗  ██║██╔════╝██║  ██║██║   ██║██╔════╝██╔════╝${NC}"
+echo -e " ${BLUE} ██╔██╗ ██║█████╗  ███████║██║   ██║█████╗  ███████╗${NC}"
+echo -e " ${BLUE} ██║╚██╗██║██╔══╝  ██╔══██║██║   ██║██╔══╝  ╚════██║${NC}"
+echo -e " ${BLUE} ██║ ╚████║███████╗██║  ██║╚██████╔╝███████╗███████║${NC}"
+echo -e " ${BLUE} ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝${NC}"
+echo -e "${BLUE}=======================================================${NC}"
+echo -e "${GREEN}        ✨ Nexus CLI Node Auto-Installer ✨${NC}"
+echo -e "${BLUE}=======================================================${NC}"
 
-# Step 1 – Guide user to get Node ID
-whiptail --title "🔐 Login Instructions" --msgbox "1. Go to https://app.nexus.xyz/nodes\n2. Login with your email or Web3 wallet\n3. Click 'Add CLI Node'\n4. Copy your numeric Node ID (e.g. 345677)" 12 60
+# Login instructions
+echo -e "\n${YELLOW}🔐 Step 1: Log in to Nexus Dashboard${NC}"
+echo -e "   👉 ${CYAN}https://app.nexus.xyz/nodes${NC}"
+echo -e "   - Login with email OR Web3 wallet"
+echo -e "   - Click 'Add CLI Node' and copy the Node ID (e.g. 345677)"
 
-# Step 2 – Ask for Node ID
+# Prompt for Node ID
 while true; do
-    NODE_ID=$(whiptail --inputbox "Enter your Node ID (numbers only):" 10 60 --title "🧩 Node ID" 3>&1 1>&2 2>&3)
-    [[ $? -ne 0 ]] && exit 1
-    if [[ "$NODE_ID" =~ ^[0-9]+$ ]]; then
+    echo ""
+    read -p "$(echo -e "${GREEN}🔢 Enter your numeric Node ID: ${NC}")" yournodeid
+    if [[ "$yournodeid" =~ ^[0-9]+$ ]]; then
+        echo -e "${GREEN}✅ Node ID accepted: $yournodeid${NC}"
         break
     else
-        whiptail --title "❌ Invalid Input" --msgbox "Node ID must be numeric. Please try again." 8 50
+        echo -e "${RED}❌ Invalid input. Please enter digits only.${NC}"
     fi
 done
 
-# Step 3 – Confirm and continue
-whiptail --title "✅ Node ID Set" --msgbox "Node ID set to: $NODE_ID\n\nLet's move on to installation..." 10 50
+# Install dependencies
+echo -e "\n${CYAN}📦 Installing dependencies...${NC}"
+sudo apt update -y && sudo apt upgrade -y
+sudo apt install -y screen curl build-essential pkg-config libssl-dev git git-all protobuf-compiler
 
-# Step 4 – Install dependencies
-{
-    echo 10; sleep 1
-    sudo apt update -y > /dev/null 2>&1
-    echo 30; sleep 1
-    sudo apt upgrade -y > /dev/null 2>&1
-    echo 50; sleep 1
-    sudo apt install screen curl build-essential pkg-config libssl-dev git git-all protobuf-compiler -y > /dev/null 2>&1
-    echo 80; sleep 1
-    sudo apt update > /dev/null 2>&1
-    echo 100; sleep 1
-} | whiptail --gauge "Installing system packages..." 6 50 0
+# Install Rust
+echo -e "\n${CYAN}🦀 Installing Rust...${NC}"
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source "$HOME/.cargo/env"
+rustup target add riscv32i-unknown-none-elf
 
-# Step 5 – Install Rust
-{
-    echo 30; sleep 1
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y > /dev/null 2>&1
-    source "$HOME/.cargo/env"
-    echo 70; sleep 1
-    rustup target add riscv32i-unknown-none-elf > /dev/null 2>&1
-    echo 100; sleep 1
-} | whiptail --gauge "Installing Rust..." 6 50 0
+# Clone and build Nexus CLI
+echo -e "\n${CYAN}📥 Cloning and building Nexus CLI...${NC}"
+git clone https://github.com/nexus-xyz/nexus-cli
+cd nexus-cli/clients/cli || { echo -e "${RED}❌ Failed to enter CLI directory${NC}"; exit 1; }
+cargo build --release
 
-# Step 6 – Clone and build nexus-cli
-{
-    echo 20; sleep 1
-    git clone https://github.com/nexus-xyz/nexus-cli > /dev/null 2>&1
-    echo 50; sleep 1
-    cd nexus-cli/clients/cli
-    cargo build --release > /dev/null 2>&1
-    echo 100; sleep 1
-} | whiptail --gauge "Cloning and building Nexus CLI..." 6 50 0
+# Copy binary
+echo -e "\n${CYAN}🔧 Installing Nexus binary...${NC}"
+sudo cp target/release/nexus-network /usr/local/bin/
+nexus-network --version
 
-# Step 7 – Move binary and create service
-{
-    sudo cp target/release/nexus-network /usr/local/bin/
-    sudo tee /etc/systemd/system/nexus.service > /dev/null <<EOF
+# Create systemd service
+echo -e "\n${CYAN}🛠️  Creating systemd service...${NC}"
+sudo tee /etc/systemd/system/nexus.service > /dev/null <<EOF
 [Unit]
-Description=Nexus Node Service
+Description=Nexus CLI Node
 After=network-online.target
 
 [Service]
 Type=simple
 User=$USER
-ExecStart=/usr/local/bin/nexus-network start --node-id $NODE_ID --headless
+ExecStart=/usr/local/bin/nexus-network start --node-id $yournodeid --headless
 Restart=always
-RestartSec=2
+RestartSec=3
 LimitNOFILE=65535
 
 [Install]
 WantedBy=multi-user.target
 EOF
-    sudo systemctl daemon-reload
-    sudo systemctl enable nexus
-    sudo systemctl start nexus
-} > /dev/null 2>&1
 
-# Step 8 – Final confirmation
-whiptail --title "🎉 Done!" --msgbox "Your Nexus node has been installed and is now running as a service!\n\nPress OK to watch the logs in real time." 12 60
+# Start the service
+echo -e "\n${CYAN}🚀 Starting node service...${NC}"
+sudo systemctl daemon-reload
+sudo systemctl enable nexus
+sudo systemctl start nexus
 
-# Show logs
-clear
-echo "${GREEN}✅ Node running successfully! Showing logs below:${RESET}"
-echo "${CYAN}Press Ctrl+C to exit.${RESET}"
+sleep 2
+if [[ $(systemctl is-active nexus) == "active" ]]; then
+    echo -e "\n${GREEN}🎉 Nexus node is up and running!${NC}"
+else
+    echo -e "\n${RED}❌ Failed to start the Nexus node.${NC}"
+    journalctl -u nexus --no-pager | tail -n 20
+    exit 1
+fi
+
+# Final message
+echo -e "\n${BLUE}=======================================================${NC}"
+echo -e "${GREEN}📄 Live logs will be shown below. Press Ctrl+C to exit.${NC}"
+echo -e "${BLUE}=======================================================${NC}"
 sleep 2
 journalctl -u nexus -f
