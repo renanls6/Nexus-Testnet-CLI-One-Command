@@ -32,7 +32,8 @@ source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-
 ### **Run the Multi-Node Script**
 
 ```bash
-source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/multi.sh
+source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/multi.sh)
+
 ```
 
 - The script will ask **how many nodes** you want to run.
