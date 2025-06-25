@@ -10,7 +10,8 @@ This method runs **one node per VPS or PC**.
 ### **Install & Run Nexus Node**
 
 ```bash
-source <(wget -O -https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/installation.sh
+source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/installation.sh)
+
 ```
 
 - The script will prompt for your **Node ID** (see below).
