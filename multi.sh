@@ -17,7 +17,7 @@ display_header() {
     echo -e " ${BLUE}╚██████╔╝██╔╝ ██╗    ██║  ██║███████╗██║ ╚████║██║  ██║██║ ╚████║${NC}"
     echo -e " ${BLUE}╚═════╝ ╚═╝  ╚═╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═══╝${NC}"
     echo -e "${BLUE}===============================================================${NC}"
-    echo -e "${GREEN}         ✨ Ritual Node Auto-Installer by Hustle ✨${NC}"
+    echo -e "${GREEN}         ✨ Aztec Node Auto-Installer ✨${NC}"
     echo -e "${BLUE}===============================================================${NC}"
 }
 
