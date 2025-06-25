@@ -13,6 +13,7 @@ Install & run your Nexus node with one command:
 
 ```bash
 source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/installation.sh)
+```
 
 🔐 You’ll be prompted for your Node ID during setup.
 ✅ After installation, your node will start automatically as a background service.
