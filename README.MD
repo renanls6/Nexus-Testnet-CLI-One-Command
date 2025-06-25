@@ -16,9 +16,11 @@ source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-
 ```
 
 🔐 You’ll be prompted for your Node ID during setup.
+
 ✅ After installation, your node will start automatically as a background service.
 
 🔍 Find Your Node ID
+
 🌐 Go to: https://app.nexus.xyz/nodes
 
 🔑 Log in to your account
@@ -30,12 +32,15 @@ source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-
 🔄 Multi-Node Setup (Run multiple nodes on one VPS/PC)
 ⚠️ Recommended: 8GB RAM per VPS for multi-node setup
 
+
+
 Run the multi-node installation script:
 
-bash
-Copiar
-Editar
-bash <(curl -fsSL https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/multi.sh)
+
+```bash
+source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/multi.sh)
+```
+
 You’ll be asked:
 
 How many nodes you want to run
