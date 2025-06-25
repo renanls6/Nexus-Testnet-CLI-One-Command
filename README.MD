@@ -10,7 +10,7 @@ This method runs **one node per VPS or PC**.
 ### **Install & Run Nexus Node**
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/installation.sh
+source <(wget -O -https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/installation.sh
 ```
 
 - The script will prompt for your **Node ID** (see below).
@@ -31,7 +31,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-O
 ### **Run the Multi-Node Script**
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/multi.sh
+source <(wget -O - https://raw.githubusercontent.com/renanls6/Nexus-Testnet-CLI-One-Command-/refs/heads/main/multi.sh
 ```
 
 - The script will ask **how many nodes** you want to run.
